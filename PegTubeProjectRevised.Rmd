@@ -1,0 +1,480 @@
+---
+title: "PEG Tube Project"
+author: "Spiro Stilianoudakis"
+header-includes:
+- \usepackage{accents}
+- \usepackage{stackengine}
+- \usepackage{amsmath}
+output:
+  html_document:
+    fig_caption: yes
+    fig_height: 8
+    fig_width: 8
+    number_sections: yes
+    toc: yes
+  pdf_document:
+    toc: yes
+  word_document:
+    fig_caption: yes
+    fig_height: 3
+    fig_width: 2
+    toc: yes
+    
+abstract: Head and neck cancer is a group of cancer that starts within the mouth,
+  nose, throat, larynx, sinuses, or salivary glands. Due to the area of the cancer
+  and the need for radiation treatment, often times a percutaneous endoscopic gastrostomy
+  (PEG) tube is passed into the patient's stomach to provide a means of feeding when
+  oral intake is not adequate. This can result in a patient developing dysphagia,
+  the medical term for difficulty in swallowing. There are varying degrees of dysphagia
+  and for the purposes of this study, patients that had dysphagia of grade 3 or higher
+  were termed "chronic" dysphagia, otherwise they were considered "not chronic."  A
+  total of 199 patients that had peg tubes placed were analyzed to see if there was
+  a relationship between the timing of the placement and the development of chronic
+  dysphagia using chi-squared tests. Furthermore, other clinical characteristics such as 
+  surgery status, chemotherapy status, and alcohol intake were analyzed to see if they influenced 
+  the relationship of timing of tube placement on the development of chronic dysphagia.
+  Likewise student's t-tests were used to see if there was a meaningful difference in 
+  weight and hemoglobin levels for PEG tubes placed prior to treatment or not. Finally, 
+  summary statistics were provided for smoking status tumor site, T-stage, and N-stage.
+---
+
+# Introduction
+
+Dysphagia is the medical term for having difficulty in swallowing and is prevalent among patients with head and neck cancer.  There are varying grades of dysphagia, ranging from one to four. *Chronic dysphagia*, denoted by grade 3 or higher, is defined as severely altered eating/swallowing; tubefeeding or total parenteral nutrition (TPN) or requiring hospitalization. In head and neck cancers, due to the area of the cancer and the need for radiation treatment, often times a percutaneous endoscopic gastrostomy (PEG) tube is passed into the patient's stomach to provide a means of feeding when oral intake is not adequate. Physicians are sometimes quick to prescribe PEG tubes without fully understanding the ramifications it can have on the patients ability to swallow. The development of chronic dysphagia can lead to malnutrition and can even be life threatening. PEG tubes can also lead to the loss of the ability to swallow and it can often be difficult for a patient to regain this ability. Thus, it is important to understand if there are any factors that lead to chronic dysphagia. 
+
+# Methods
+
+## Treatment and Measurements
+
+A total of 199 patients were included in the analyses, all of which suffered from head and neck cancer. Prior to treatment, certain demographic and clinical information was obtained. These included age, gender, and ethnicity. Patients included in the analysis were those that suffered from head and neck cancer and were subsequently fitted with a PEG tube. The timing of the PEG tube placement was dicotomized into those patients that received a PEG tube before radiation treatment, and those that did not. The group of patients that did not receive a PEG tube before radiation treatment consisted of those that received it during or after treatment. These patients were consolidated into one group. Weight and hemoglobin levels were recorded before and after treatment for patients that received PEG tubes.  Patients' surgery status was also obtained, consisting of whether or not surgical resection was performed. Likewise, it was recorded whether or not the patient was undergoing concurrent chemotherapy as part of their treatment. Alcohol (or EtOH) intake was also dichotomized into patients that were considered users of alcohol versus those that were not. Patients' smoking status was measured in terms of pack years, consisting of 5 levels ranging from less than 5 packs per year, to greater than 30 packs per year. Lastly, the location of the cancer was recorded, along with the T-stage and N-stage.
+
+## Statistical Analyses
+
+The primary study aim was to determine if there was a relationship between the timing of PEG tube placement and the development of chronic dysphagia. Potential confounding and effect modification was checked for clinical features such as surgery and chemotherapy status, as well as smoking and alcohol intake. This was performed using chi-squared tests. The null hypothesis was that the timing of the tube placement and the development of chronic dysphagia were independent. The Mantel-Hanzel method was used to adjust for the confounding variables, while the Breslow-Day Test for Homogeneity was used to test the statistical significance of potential effect modifiers. For confounding, a variable difference of more than 10% between the crude and adjusted odds ratios was considered. Student's T-tests were performed in order to determine if the difference in weight and hemoglobin levels were statistically significant between patients that received PEG tubes before treatment or not. Finally, summary statistics were performed to visually gauge the relationship between tumor site, T-stage, and N-stage on the development of chronic dysphagia. All tests were performed at the 0.05 alpha level of significance. The analysis was conducted in R version 3.4.1.
+
+# Results
+
+## Patient Characteristics 
+
+The average age of patients included in the analysis was 59 with a minimum age of 13 and maximum age of 84. Of the patients that recieved a PEG tube and had a recorded response, 82% were male (n=162) and 18% were female (n=36). Most of the sample identified themselves as either white (59%; n=117) or black (37%; n=73), with the rest only making up 4% of the sample. Table 1 lists the summary statistics for various patient characteristics broken down my timing of PEG tube placement and development of chronic dysphagia.
+
+```{r echo=FALSE}
+
+out <- 
+  structure(c("185","155","162","36","117","73","1","2","6","5","2","19","25","117","30","27","167","4", 
+              "58 (18,84)","2.60 (0,9.2)","86","14","56","43","0","0","1","2","1","10","12","53","22","18","80","2", 
+              "60 (13,83)","1.82 (0,7)","75","25","64","26","1","3","6","3","1","8","14","70","4","7","90","3", 
+              "63 (44,84)","2.80 (0,7.1)","92","8","54","38","4","4","0","4","0","9","26","52","9","21","79","0", 
+              "58 (13,79)","2.20 (0,9.2)","80","20","59","36","0","1","4","2","1","10","11","60","16","13","85","2"
+  ), 
+  .Dim = c(18L, 5L), 
+  .Dimnames = list(NULL, c("r", "hr", "p", "hr", "p")))
+
+## format rows/cols
+colnames(out) <- c('Total (n)','Prior','Not Prior','Chronic','Not Chronic')
+rownames(out) <- c("Age (Range)","CT Scan (Range)","&emsp;Male","&emsp;Female","&emsp;White","&emsp;Black","&emsp;Hispanic","&emsp;Asian","&emsp;Other","&emsp;<45 Gy","&emsp;45-59.9 Gy","&emsp;60-63.9 Gy","&emsp;64-67.9 Gy","&emsp;68-70 Gy","&emsp;>70 Gy","&emsp;3D Conformal","&emsp;IMRT","&emsp;IGRT")
+
+## add padding row called subset
+out <- rbind(out[1:2, ], 'Gender (%):' = '', out[3:4, ],'Ethnicity (%):' = '',out[5:9,],'Radiation Dose (%):' = '',out[10:15,],'Radiation Type (%):' = '',out[16:18,])
+
+## bolding rownames
+rownames(out) <- sprintf('<b>%s</b>', rownames(out))
+
+## table column headers (with line breaks (<br />))
+cgroup <- c('', 'Timing of<br />Tube Placement', 'Dysphagia')
+
+# zzz <- `rownames<-`(out, NULL)
+
+library(htmlTable)
+htmlTable(out, rowlabel = 'Variable', 
+          ctable = TRUE, align = 'ccccc',
+          ## number of columns that each cgroup label spans:
+          n.cgroup = c(1, 2, 2), cgroup = cgroup,
+          ## insert two table spanning sections:
+          tspanner = c('',''),  # no labels
+          n.tspanner = c(22), # number of rows to span (must sum to nrow(out))
+#           css.tspanner.sep = "border-bottom: 1px dotted grey;",
+          caption = "Table 1. Demographic and clinical characteristics for patients with head and neck cancer fitted with PEG tubes")#, 
+          #tfoot = '<font size=1><sup>&dagger;</sup>Some note.</font>')
+```
+
+```{r echo=FALSE}
+library(ggplot2)
+library(gridExtra)
+
+peg <- read.csv("HeadAndNeckRadiation_DATA_2017-08-24_0756.csv",header=T,na.strings="")
+attach(peg)
+
+```
+
+
+## Tube Placement Characteristics
+
+Weight and hemoglobin levels were recorded before and after radiation treatment. The difference was found for both variables and analyzed with respect to whether the patient had a peg tube place prior to radiation treatment or not. The mean difference in weight for the patients with prior PEG tube placement was 11.7, while the other group had a mean difference of 10.0. For hemoglobin, the mean difference for the prior group was 0.64, while the other group had a mean difference of 1.03. A Student's t-test was conducted and it was found that the two mean differences for both weight and hemoglobin were not significant. The corresponding 95% confidence intervals were found to be (-2.4,5.8) and (-1.1,0.4) for weight and hemoglobin differences respectively.
+
+```{r echo=FALSE, message=FALSE, fig.height=5,fig.width=8, fig.cap="Figure 3. Histograms and the corresponding density curves of the difference in weight and hemoglobin levels separated by whether the patient recieved a PEG tube prior to radiation therapy or not. The bars and curves in red represent patients that received PEG tubes prior to radiation, while the blue represents patients that did not."}
+
+wtstart <- initial_weight[complete.cases(time_nutri_tube, 
+                                                 dysphagia_chronic, 
+                                                 initial_weight,
+                                                 end_xrt_weight)]
+wtend <- end_xrt_weight[complete.cases(time_nutri_tube, 
+                                         dysphagia_chronic, 
+                                         initial_weight,
+                                         end_xrt_weight)]
+
+dysphagia <- dysphagia_chronic[complete.cases(time_nutri_tube, 
+                                              dysphagia_chronic, 
+                                              initial_weight,
+                                              end_xrt_weight)]
+dysphagia5 <- rep(NA,length(dysphagia))
+dysphagia5[which(dysphagia <= 2)] <- 0
+dysphagia5[which(dysphagia >= 3)] <- 1
+dysphagia5 <- factor(dysphagia5)
+#table(dysphagia5)
+
+tube_place <- time_nutri_tube[complete.cases(time_nutri_tube, 
+                                             dysphagia_chronic, 
+                                             initial_weight,
+                                             end_xrt_weight)]
+tube_place5 <- rep(NA, length(tube_place))
+tube_place5[which(tube_place==0)] <- 0
+tube_place5[which(tube_place >= 1)] <- 1
+tube_place5 <- factor(tube_place5)
+#table(tube_place5)
+
+wtdiff <- wtstart - wtend
+
+#t.test(wtstart,wtend,paired=T)	#significant
+
+#t.test(wtdiff)
+
+#which(tube_place5=="Prior")
+wtstartprior <- wtstart[c(which(tube_place5==0))]
+wtendprior <- wtend[c(which(tube_place5==0))]
+#t.test(wtstartprior,wtendprior,paired=TRUE)	#significant
+
+#which(tube_place5=="Not Prior")
+wtstartafter <- wtstart[c(which(tube_place5==1))]
+wtendafter <- wtend[c(which(tube_place5==1))]
+#t.test(wtstartafter,wtendafter,paired=TRUE)	#significant
+
+wtdiffprior <- wtstartprior-wtendprior
+wtdiffafter <- wtstartafter-wtendafter
+#t.test(wtdiffprior,wtdiffafter)	#not significant
+#t.test(wtdiffprior)
+#t.test(wtdiffafter)
+
+q5dframe <- cbind.data.frame(wtdiff,dysphagia5,tube_place5)
+
+wtdiffplot <- qplot(wtdiff,geom='blank',fill=tube_place5,data=q5dframe) +
+	geom_line(aes(y=..density..,colour=tube_place5),stat='density') +
+  #scale_color_manual(labels = c("Prior", "Not Prior")) +
+	geom_histogram(aes(y=..density..),alpha=.7,position='identity') +
+  scale_colour_manual(name=c('Density'),
+                      values=c('red','blue'),
+                      labels = c("Prior", "Not Prior"))+
+  scale_fill_discrete(guide=FALSE) +
+  guides(colour=FALSE) +
+      #geom_segment(aes(x = 9.146868, y = 0, xend = 14.502627, yend = 0),size=4,colour='red') +
+  #theme(legend.position=c(.85,.85)) +
+      #geom_segment(aes(x = 5.107884, y = 0, xend = 12.823366, yend = 0),size=2,colour='blue',alpha=.5) +
+  #theme(legend.position=c(.85,.85)) +
+  #stat_bin(bins = 20) +
+  #labs(title = "Difference in Weight for Patients With PEG Tubes") +
+  xlab("Difference in Weight") +
+  ylab("Density")
+
+
+hemostart <- hgb_prert[complete.cases(time_nutri_tube, 
+                                      dysphagia_chronic, 
+                                      hgb_prert,
+                                      hgb_postrt)]
+hemoend <- hgb_postrt[complete.cases(time_nutri_tube, 
+                                     dysphagia_chronic, 
+                                     hgb_prert,
+                                     hgb_postrt)]
+
+dysphagia <- dysphagia_chronic[complete.cases(time_nutri_tube, 
+                                              dysphagia_chronic, 
+                                              hgb_prert,
+                                              hgb_postrt)]
+dysphagia6 <- rep(NA,length(dysphagia))
+dysphagia6[which(dysphagia <= 2)] <- 0
+dysphagia6[which(dysphagia >= 3)] <- 1
+dysphagia6 <- factor(dysphagia6)
+#table(dysphagia6)
+
+tube_place <- time_nutri_tube[complete.cases(time_nutri_tube, 
+                                             dysphagia_chronic, 
+                                             hgb_prert,
+                                             hgb_postrt)]
+tube_place6 <- rep(NA, length(tube_place))
+tube_place6[which(tube_place==0)] <- 0
+tube_place6[which(tube_place >= 1)] <- 1
+tube_place6 <- factor(tube_place6)
+#table(tube_place6)
+
+hemodiff <- hemostart - hemoend
+
+#t.test(hemostart,hemoend,paired=T)	#significant
+
+#t.test(wtdiff)
+
+hemostartprior <- hemostart[c(which(tube_place6==0))]
+hemoendprior <- hemoend[c(which(tube_place6==0))]
+#t.test(hemostartprior,hemoendprior,paired=TRUE)		#significant
+
+#which(tube_place5=="Not Prior")
+hemostartafter <- hemostart[c(which(tube_place6==1))]
+hemoendafter <- hemoend[c(which(tube_place6==1))]
+#t.test(hemostartafter,hemoendafter,paired=TRUE)		#significant
+
+hemodiffprior <- hemostartprior-hemoendprior
+hemodiffafter <- hemostartafter-hemoendafter
+#t.test(hemodiffprior,hemodiffafter)		#not significant
+#t.test(hemodiffprior)
+#t.test(hemodiffafter)
+
+q6dframe <- cbind.data.frame(hemodiff,dysphagia6,tube_place6)
+
+hemodiffplot <- qplot(hemodiff,geom='blank',fill=tube_place6,data=q6dframe) +
+	geom_line(aes(y=..density..,colour=tube_place6),stat='density') +
+	geom_histogram(aes(y=..density..),alpha=.7,position='identity')+
+  scale_colour_manual(name=c('Density'),
+                      values=c('red','blue'),
+                      labels = c("Prior", "Not Prior"))+
+  scale_fill_discrete(guide=FALSE) +
+  guides(colour=FALSE) +
+      #geom_segment(aes(x = .251, y = 0, xend = 1.16898, yend = 0),colour='red',size=4) +
+      #geom_segment(aes(x = .1314, y = 0, xend = 1.62722, yend = 0),colour='blue',size=2) +
+	#theme(legend.position=c(.85,.85)) +
+  #labs(title = "Difference in Hemoglobin for Patients With PEG Tubes") +
+  xlab("Difference in Hemoglobin") +
+  ylab(NULL)
+
+grid.arrange(wtdiffplot, hemodiffplot,ncol=2,nrow=1)
+
+```
+
+
+## Chronic Dysphagia Characteristics
+
+Of the 199 patients that were fitted with a PEG tube, 63.8% (n=125) received said tube prior to radiation treatment. Approximately 9.6% (n=12) of those patients developed chronic dysphagia. Of the remaining 74 patients who recieved a PEG tube during or after radiation, 16.2% (n=12) developed chronic dysphagia. Although not statistically significant, patients that received a PEG tube prior to radiation were at increased odds of developing chronic dysphagia with an odds ratio of 1.69. 
+
+There were 41 patients that recieved a surgical resection, with 22.0% (n=9) developing chronic dysphagia. This was compared to the 158 patients that did not receive a surgical resection, 9.5% (n=15) of which developed chronic dysphagia. It was found that surgery status was significantly associated with the development of chronic dysphagia, with an odds ratio of 2.68. That is, the odds of developing chronic dysphagia for patients that received surgical resection are 2.68 times that of patients that did not receive surgical resection.
+
+Of the patients that received concurrent chemotherapy treatments, 75% (n=18) went on to develop chronic dysphagia. Subsequently, receiving concurrent chemotherapy was found not to be significantly associated with the development of chronic dysphagia. Patients were categorized as users or nonusers of alcohol, with 12.1% (n=17) of users developing chronic dysphagia. Likewise, this was found not to be significantly associated with the development of chronic dysphagia.
+
+After controlling for surgical resection, we found that the relationship between timing of PEG tube placement and chronic dysphagia was not significant when patients did not have surgery (OR 1.10; p-value=.865). This is in contrast to when patients did have surgery, in which case the relationship between timing and dysphagia was significant with an odds ratio of 6.00 and 95% confidence interval of (1.21, 29.73) (p-value=0.02). This suggests that the surgery status of patients is modifying the effect of timing of tube placement on the development of chronic dysphagia. That is, those patients that were fitted with a PEG tube and had a surgical resection were at significantly higher odds of developing chronic dysphagia. Concurrent chemotherapy treatments and EtOH status were found not to be counfounders or effect modifiers of the relationship between timing of tube placement and the development of chronic dysphagia. Odds ratios, confidence intervals, and corresponding p-values are given in the table below.
+
+```{r echo=FALSE}
+library(knitr)
+Variable <- c("Prior PEG Tube <br /> Placement (Yes)",
+              "Surgical <br /> Resection (Yes)",
+              "Concurrent <br /> Chemotherapy (Yes)",
+              "EtOH (Yes)")
+x <- c("12 (50)","9 (37.5)","18 (75)","17 (70.8)")   #Developed Chronic Dysphagia n=24
+y <- c("113 (64.6)","32 (18.3)","109 (62.3)","123 (70.3)")    #Did not develop chronic dysphagia n=175
+w <- c("0.55 (0.23, 1.29)","2.68 (1.08, 6.67)","1.82 (0.69, 4.81)","1.03 (0.40, 2.62)")
+z <- c(0.166,0.029,0.224,0.956)      #P-value
+
+comparisons <- data.frame(Variable, 
+                          "Developed Chronic <br /> Dysphagia n=24 (%)"=x, 
+                          "Did Not Develop <br /> Chronic Dysphagia n=175 (%)"=y,
+                          "Odds Ratio"=w,
+                          "P-Value"=z, 
+                          check.names=F)
+
+#comparisons
+kable(comparisons, caption="Table 2. Odds ratios and corresponding p-values for the relationship betwen different variables and teh development of chronic dysphagia. We see that surgery status is the only one that is significant at the 0.05 level")
+```
+
+
+Patients that smoked were separated into groups according to their pack-years. A total of 5 groups were considered, begining at <5 pk/yr and then increasing by increments up to >30 pk/yr. From Figure 2 we see that most patients that developed chronic dysphagia were in the >30 pk/yr group. Likewise, from Figure 2, we see that the proportion of patients developing chronic dysphagia was highest for patients with a tumor in the oropharynx and larynx with 41.7% (n=10) and 25.0% (n=6) respectively. The proportion of patients developing chronic dysphagia increased as T-stage increased, going from 4.1% for patients with T1 up to 45.8% for patients with T4. For N-stage, the proportion of patients that developed chronic dysphagia was greatest at N2 with 66.7% of patients developing chronic dysphagia. No patients with an N-stage of N-3 developed chronic dysphagia. 
+
+```{r echo=FALSE, fig.cap="Figure 2. Proportions of Patients developing chronic dysphagia by smoking status, tumor site, Tstage, and Nstage"}
+
+tumor <- tumor_site[complete.cases(peg[,c(11,12,19)])]
+
+
+dysphagia <- dysphagia_chronic[complete.cases(peg[,c(11,12,19)])]
+dysphagia3 <- rep(NA,length(dysphagia))
+dysphagia3[which(dysphagia <= 2)] <- 0
+dysphagia3[which(dysphagia >= 3)] <- 1
+dysphagia3 <- factor(dysphagia3)
+
+
+tube_place <- time_nutri_tube[complete.cases(peg[,c(11,12,19)])]
+tube_place3 <- rep(NA, length(tube_place))
+tube_place3[which(tube_place==0)] <- 0
+tube_place3[which(tube_place >= 1)] <- 1
+tube_place3 <- factor(tube_place3)
+
+
+tumor3 <- factor(tumor)
+levels(tumor3) <- c("oral cavity",
+                    "oropharynx",
+                    "nasopharynx",
+                    "larynx",
+                    "hypopharynx",
+                    "nasal cavity",
+                    "salivary gland",
+                    "h&n unknown")
+
+
+
+q3adframe <- cbind.data.frame(tube_place3,dysphagia3,tumor3)
+                                                                                                                   
+tumorplot <- ggplot(q3adframe, aes(x=dysphagia3,fill=tumor3)) + 
+      scale_fill_discrete(name="Tumor Site") + #,
+       #                   labels=c("Not Chronic", "Chronic")) +
+      scale_x_discrete(labels=c("No","Yes")) +
+      geom_bar(
+               width=.5,
+               position= 'fill') + 
+      xlab("Chronic Dysphagia") + 
+      ylab("Count") +
+      ggtitle("Dysphagia Count by Tumor Site") #+
+      #theme(axis.text.x=element_text(angle=90,hjust=1))
+
+#ggplot(q3adframe) + aes(x=dysphagia3,fill="tumor type") + geom_bar(position= 'fill') + xlab("Tumor Site") + ylab("Proportion")
+
+
+#dysphagia vs tstage
+
+tstage <- t_stage[complete.cases(peg[,c(11,12,30)])]
+
+dysphagia <- dysphagia_chronic[complete.cases(peg[,c(11,12,30)])]
+dysphagia3b <- rep(NA,length(dysphagia))
+dysphagia3b[which(dysphagia <= 2)] <- 0
+dysphagia3b[which(dysphagia >= 3)] <- 1
+dysphagia3b <- factor(dysphagia3b)
+
+
+tube_place <- time_nutri_tube[complete.cases(peg[,c(11,12,30)])]
+tube_place3b <- rep(NA, length(tube_place))
+tube_place3b[which(tube_place==0)] <- 0
+tube_place3b[which(tube_place >= 1)] <- 1
+tube_place3b <- factor(tube_place3b)
+
+
+tstage3 <- factor(tstage)
+levels(tstage3) <- c("T1",
+                    "T2",
+                    "T3",
+                    "T4",
+                    "Tx",
+                    "Not Reported")
+
+q3bdframe <- cbind.data.frame(tube_place3b,dysphagia3b,tstage3)
+
+tstageplot <- ggplot(q3bdframe, aes(x=dysphagia3b,fill=tstage3)) + 
+      scale_fill_discrete(name="T Stage") + #,
+        #                  labels=c("Not Chronic", "Chronic")) +
+      scale_x_discrete(labels=c("No","Yes")) +
+      geom_bar(
+            width=.5,
+            position= 'fill') + 
+      xlab("Chronic Dysphagia") + 
+      ylab("Count") +
+      ggtitle("Dysphagia Count by T Stage") #+
+      #theme(axis.text.x=element_text(angle=90,hjust=1))
+
+
+#dysphagia vs nstage
+
+nstage <- n_stage[complete.cases(peg[,c(11,12,31)])]
+
+nstage[which(nstage >= 2 & nstage <= 4)] <- 2
+
+
+dysphagia <- dysphagia_chronic[complete.cases(peg[,c(11,12,31)])]
+dysphagia3c <- rep(NA,length(dysphagia))
+dysphagia3c[which(dysphagia <= 2)] <- 0
+dysphagia3c[which(dysphagia >= 3)] <- 1
+dysphagia3c <- factor(dysphagia3c)
+
+
+tube_place <- time_nutri_tube[complete.cases(peg[,c(11,12,31)])]
+tube_place3c <- rep(NA, length(tube_place))
+tube_place3c[which(tube_place==0)] <- 0
+tube_place3c[which(tube_place >= 1)] <- 1
+tube_place3c <- factor(tube_place3c)
+
+
+nstage3 <- factor(nstage)
+levels(nstage3) <- c("N0",
+                     "N1",
+                     "N2",
+                     "N3",
+                     "Not Reported")
+
+	
+
+q3cdframe <- cbind.data.frame(tube_place3c,dysphagia3c,tstage3)
+
+nstageplot <- ggplot(q3cdframe, aes(x=dysphagia3c,fill=nstage3)) + 
+      scale_fill_discrete(name="N Stage") + #,
+        #                  labels=c("Not Chronic", "Chronic")) +
+      scale_x_discrete(labels=c("No","Yes")) +
+      geom_bar(
+            width=.5,
+            position= 'fill') + 
+      xlab("Chronic Dysphagia") + 
+      ylab("Count") +
+      ggtitle("Dysphagia Count by N Stage") #+
+#theme(axis.text.x=element_text(angle=90,hjust=1))
+
+packyears <- pack_yrs_smoking[complete.cases(time_nutri_tube, 
+                                           dysphagia_chronic,
+                                           pack_yrs_smoking)]
+packyears7 <- factor(packyears)
+
+dysphagia <- dysphagia_chronic[complete.cases(time_nutri_tube, 
+                                              dysphagia_chronic, 
+                                              pack_yrs_smoking)]
+dysphagia7 <- rep(NA,length(dysphagia))
+dysphagia7[which(dysphagia <= 2)] <- 0
+dysphagia7[which(dysphagia >= 3)] <- 1
+dysphagia7 <- factor(dysphagia7)
+
+
+tube_place <- time_nutri_tube[complete.cases(time_nutri_tube, 
+                                             dysphagia_chronic, 
+                                             pack_yrs_smoking)]
+tube_place7 <- rep(NA, length(tube_place))
+tube_place7[which(tube_place==0)] <- 0
+tube_place7[which(tube_place >= 1)] <- 1
+tube_place7 <- factor(tube_place7)
+
+
+
+levels(packyears7) <- c("<5 pk/yr",
+                      "5-10 pk/yr",
+                      "10-19 pk/yr",
+                      "20-30 pk/yr",
+                      ">30 pk/yr")
+
+
+q7dframe <- cbind.data.frame(tube_place7,dysphagia7,packyears7)
+
+smokeplot <- ggplot(q7dframe, aes(x=dysphagia7,fill=packyears7)) + 
+  scale_fill_discrete(name="Pack Years") + #,
+  #                  labels=c("Not Chronic", "Chronic")) +
+  scale_x_discrete(labels=c("No","Yes")) +
+  geom_bar(
+    width=.5,
+    position= 'fill') + 
+  xlab("Chronic Dysphagia") + 
+  ylab("Count") +
+  ggtitle("Dysphagia Count by Smoking Status") #+
+#theme(axis.text.x=element_text(angle=90,hjust=1))
+
+
+grid.arrange(smokeplot,tumorplot,tstageplot,nstageplot,ncol=2,nrow=2)
+```
+
+
+
+
